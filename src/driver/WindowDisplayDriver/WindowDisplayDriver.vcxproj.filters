@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright (c) WindowDisplay project. -->
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files"><UniqueIdentifier>{505510DF-488C-4A45-BD3B-308D2EB75B6B}</UniqueIdentifier><Extensions>cpp;c;cc;cxx</Extensions></Filter>
+    <Filter Include="Header Files"><UniqueIdentifier>{FB58D6ED-542F-454E-A4D8-E78A46788120}</UniqueIdentifier><Extensions>h;hpp;hxx</Extensions></Filter>
+    <Filter Include="Driver Package"><UniqueIdentifier>{79B8D455-6B40-4415-9AA8-44D5FE700D2C}</UniqueIdentifier><Extensions>inf;rc</Extensions></Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Driver.cpp"><Filter>Source Files</Filter></ClCompile>
+    <ClInclude Include="Driver.h"><Filter>Header Files</Filter></ClInclude>
+    <ClInclude Include="Trace.h"><Filter>Header Files</Filter></ClInclude>
+    <ResourceCompile Include="WindowDisplayDriver.rc"><Filter>Driver Package</Filter></ResourceCompile>
+    <Inf Include="WindowDisplayDriver.inf"><Filter>Driver Package</Filter></Inf>
+  </ItemGroup>
+</Project>

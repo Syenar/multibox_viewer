@@ -1,0 +1,22 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <UseWPF>true</UseWPF>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <ApplicationTitle>MultiBox Viewer</ApplicationTitle>
+    <Product>MultiBox Viewer</Product>
+    <AssemblyName>WindowDisplay</AssemblyName>
+  </PropertyGroup>
+  <Target Name="CopyHostBesideController" AfterTargets="Build">
+    <PropertyGroup>
+      <_HostCandidate1>$(MSBuildThisFileDirectory)..\..\host\WindowDisplayHost\bin\x64\$(Configuration)\WindowDisplayHost.exe</_HostCandidate1>
+      <_HostCandidate2>$(MSBuildThisFileDirectory)..\..\..\bin\x64\$(Configuration)\WindowDisplayHost.exe</_HostCandidate2>
+      <_HostCandidate3>$(MSBuildThisFileDirectory)..\..\..\artifacts\$(Configuration)\WindowDisplayHost.exe</_HostCandidate3>
+    </PropertyGroup>
+    <Copy SourceFiles="$(_HostCandidate1)" DestinationFolder="$(TargetDir)" SkipUnchangedFiles="true" Condition="Exists('$(_HostCandidate1)')" />
+    <Copy SourceFiles="$(_HostCandidate2)" DestinationFolder="$(TargetDir)" SkipUnchangedFiles="true" Condition="!Exists('$(_HostCandidate1)') and Exists('$(_HostCandidate2)')" />
+    <Copy SourceFiles="$(_HostCandidate3)" DestinationFolder="$(TargetDir)" SkipUnchangedFiles="true" Condition="!Exists('$(_HostCandidate1)') and !Exists('$(_HostCandidate2)') and Exists('$(_HostCandidate3)')" />
+  </Target>
+</Project>

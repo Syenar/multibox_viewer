@@ -1,0 +1,87 @@
+<Window x:Class="WindowDisplay.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="clr-namespace:WindowDisplay.ViewModels"
+        xmlns:helpers="clr-namespace:WindowDisplay.Helpers"
+        Title="MultiBox Viewer" Width="1060" Height="720" MinWidth="780" MinHeight="560"
+        WindowStartupLocation="CenterScreen">
+  <Window.DataContext><vm:MainViewModel/></Window.DataContext>
+  <Window.Resources>
+    <helpers:BoolToVisibilityConverter x:Key="BoolToVisibility"/>
+    <helpers:AttentionBrushConverter x:Key="AttentionBrush"/>
+  </Window.Resources>
+  <Grid Margin="42,30">
+    <Grid.RowDefinitions><RowDefinition Height="Auto"/><RowDefinition Height="24"/><RowDefinition Height="*"/><RowDefinition Height="Auto"/></Grid.RowDefinitions>
+    <Grid>
+      <StackPanel>
+        <TextBlock Text="MultiBox Viewer" FontSize="28" FontWeight="SemiBold"/>
+        <TextBlock Text="A calm workspace for your virtual displays" Foreground="{DynamicResource SubtleTextBrush}" Margin="0,4,0,0"/>
+      </StackPanel>
+      <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center">
+        <Button Command="{Binding RefreshCommand}" Style="{StaticResource SecondaryButton}" Content="Refresh" Margin="0,0,10,0"/>
+        <Button Command="{Binding RestoreLayoutCommand}" Style="{StaticResource SecondaryButton}" Content="Restore Layout" Margin="0,0,10,0"/>
+        <Button Command="{Binding NewDisplayCommand}" Style="{StaticResource PrimaryButton}" Content="+  New Display" Margin="0,0,10,0"/>
+        <Button Command="{Binding ToggleThemeCommand}" Style="{StaticResource SecondaryButton}" Content="◐" ToolTip="Toggle theme" Margin="0,0,8,0"/>
+        <Button Command="{Binding SettingsCommand}" Style="{StaticResource SecondaryButton}" Content="⚙" ToolTip="Settings"/>
+      </StackPanel>
+    </Grid>
+    <Grid Grid.Row="2">
+      <ScrollViewer VerticalScrollBarVisibility="Auto">
+        <ItemsControl ItemsSource="{Binding Displays}" Visibility="{Binding HasDisplays, Converter={StaticResource BoolToVisibility}}">
+          <ItemsControl.ItemsPanel><ItemsPanelTemplate><WrapPanel/></ItemsPanelTemplate></ItemsControl.ItemsPanel>
+          <ItemsControl.ItemTemplate>
+            <DataTemplate>
+              <Border Style="{StaticResource Card}" Width="300" Margin="0,0,18,18">
+                <Grid>
+                  <Grid.RowDefinitions><RowDefinition Height="Auto"/><RowDefinition Height="Auto"/><RowDefinition Height="18"/><RowDefinition Height="Auto"/></Grid.RowDefinitions>
+                  <Grid>
+                    <StackPanel>
+                      <TextBlock Text="{Binding Title}" FontSize="18" FontWeight="SemiBold"/>
+                      <TextBlock Text="{Binding StateText}" Foreground="{Binding NeedsAttention, Converter={StaticResource AttentionBrush}}" FontWeight="SemiBold" Margin="0,5,0,0"/>
+                    </StackPanel>
+                    <Button HorizontalAlignment="Right" Content="•••" Padding="6,0" Background="Transparent" BorderThickness="0">
+                      <Button.ContextMenu>
+                        <ContextMenu DataContext="{Binding PlacementTarget.DataContext, RelativeSource={RelativeSource Self}}">
+                          <MenuItem Header="Rename" Command="{Binding RenameCommand}"/>
+                          <MenuItem Header="Open Viewer" Command="{Binding OpenViewerCommand}"/>
+                          <MenuItem Header="Move App Here" Command="{Binding MoveAppCommand}"/>
+                          <Separator/>
+                          <MenuItem Header="Change Resolution" Command="{Binding ChangeResolutionCommand}"/>
+                          <MenuItem Header="Change Orientation" Command="{Binding ChangeOrientationCommand}"/>
+                          <MenuItem Header="Duplicate Configuration" Command="{Binding DuplicateCommand}"/>
+                          <MenuItem Header="Open Windows Display Settings" Command="{Binding OpenSettingsCommand}"/>
+                          <MenuItem Header="Restart Display" Command="{Binding RestartCommand}"/>
+                          <MenuItem Header="Repair Display" Command="{Binding RepairCommand}"/>
+                          <Separator/>
+                          <MenuItem Header="Remove Display" Command="{Binding RemoveCommand}"/>
+                        </ContextMenu>
+                      </Button.ContextMenu>
+                    </Button>
+                  </Grid>
+                  <TextBlock Grid.Row="1" Text="{Binding Resolution}" Foreground="{DynamicResource SubtleTextBrush}" Margin="0,18,0,0"/>
+                  <StackPanel Grid.Row="3" Orientation="Horizontal">
+                    <Button Content="Open Viewer" Command="{Binding OpenViewerCommand}" Style="{StaticResource PrimaryButton}"/>
+                    <Button Content="Move App" Command="{Binding MoveAppCommand}" Style="{StaticResource SecondaryButton}" Margin="8,0,0,0"/>
+                  </StackPanel>
+                </Grid>
+              </Border>
+            </DataTemplate>
+          </ItemsControl.ItemTemplate>
+        </ItemsControl>
+      </ScrollViewer>
+      <StackPanel Visibility="{Binding IsEmpty, Converter={StaticResource BoolToVisibility}}" HorizontalAlignment="Center" VerticalAlignment="Center" Width="420">
+        <Border Style="{StaticResource Card}">
+          <StackPanel HorizontalAlignment="Center">
+            <TextBlock Text="Your display desk is ready." FontSize="22" FontWeight="SemiBold" TextAlignment="Center"/>
+            <TextBlock Text="Create a virtual display for a viewer, an app, or a focused workspace." Foreground="{DynamicResource SubtleTextBrush}" TextWrapping="Wrap" TextAlignment="Center" Margin="0,10,0,22"/>
+            <Button Content="Create My First Display" Command="{Binding NewDisplayCommand}" Style="{StaticResource PrimaryButton}" HorizontalAlignment="Center"/>
+          </StackPanel>
+        </Border>
+      </StackPanel>
+    </Grid>
+    <Grid Grid.Row="3">
+      <TextBlock Text="{Binding StatusText}" Foreground="{DynamicResource SubtleTextBrush}" VerticalAlignment="Center"/>
+      <Button Content="Save Layout" Command="{Binding SaveLayoutCommand}" Style="{StaticResource SecondaryButton}" HorizontalAlignment="Right"/>
+    </Grid>
+  </Grid>
+</Window>

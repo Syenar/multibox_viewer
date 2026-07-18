@@ -1,0 +1,128 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="12.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{A1B2C3D4-E5F6-7890-ABCD-EF1234567890}</ProjectGuid>
+    <RootNamespace>WindowDisplayDriver</RootNamespace>
+    <Keyword>Win32Proj</Keyword>
+    <ProjectName>WindowDisplayDriver</ProjectName>
+    <WindowsTargetPlatformVersion>10.0.26100.0</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup>
+    <!-- NuGet WDK props omit the trailing slash; WDK .props concatenate paths without inserting one. -->
+    <WDKContentRoot Condition="'$(WDKContentRoot)' != '' and !$(WDKContentRoot.EndsWith('\'))">$(WDKContentRoot)\</WDKContentRoot>
+    <WDKBuildFolder Condition="'$(WDKBuildFolder)' == ''">10.0.26100.0</WDKBuildFolder>
+    <!-- NuGet WDK package does not define these; point at the installed kit / package includes. -->
+    <WDK_UM_INC_PATH Condition="'$(WDK_UM_INC_PATH)' == ''">$(WDKContentRoot)Include\$(WindowsTargetPlatformVersion)\um\</WDK_UM_INC_PATH>
+    <UMDF_INC_PATH Condition="'$(UMDF_INC_PATH)' == ''">$(WDKContentRoot)Include\wdf\umdf\</UMDF_INC_PATH>
+    <UMDF_LIB_PATH Condition="'$(UMDF_LIB_PATH)' == ''">$(WDKContentRoot)Lib\wdf\umdf\$(Platform)\</UMDF_LIB_PATH>
+    <WDK_UM_LIB_PATH Condition="'$(WDK_UM_LIB_PATH)' == ''">$(WDKContentRoot)Lib\$(WindowsTargetPlatformVersion)\um\$(Platform)\</WDK_UM_LIB_PATH>
+    <IDDCX_LIB_PATH Condition="'$(IDDCX_LIB_PATH)' == ''">$(WDK_UM_LIB_PATH)iddcx\1.4\</IDDCX_LIB_PATH>
+    <SkipInfVerification>true</SkipInfVerification>
+    <!-- Sign via tools\sign-and-install-driver.ps1 instead of WDK TestSign. -->
+    <EnableTestSign>false</EnableTestSign>
+    <ApiValidator_Enable>false</ApiValidator_Enable>
+  </PropertyGroup>
+  <!-- WDK toolset expects this; VS driver templates normally pull it in. -->
+  <Import Project="$(WDKContentRoot)build\$(WDKBuildFolder)\WindowsDriver.Default.props"
+          Condition="'$(WDKContentRoot)' != '' and Exists('$(WDKContentRoot)build\$(WDKBuildFolder)\WindowsDriver.Default.props')" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>WindowsUserModeDriver10.0</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+    <TargetVersion>Windows10</TargetVersion>
+    <DriverType>UMDF</DriverType>
+    <DriverTargetPlatform>Universal</DriverTargetPlatform>
+    <UMDF_VERSION_MAJOR>2</UMDF_VERSION_MAJOR>
+    <UMDF_VERSION_MINOR>25</UMDF_VERSION_MINOR>
+    <IndirectDisplayDriver>true</IndirectDisplayDriver>
+    <IDDCX_VERSION_MAJOR>1</IDDCX_VERSION_MAJOR>
+    <IDDCX_VERSION_MINOR>4</IDDCX_VERSION_MINOR>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>WindowsUserModeDriver10.0</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+    <TargetVersion>Windows10</TargetVersion>
+    <DriverType>UMDF</DriverType>
+    <DriverTargetPlatform>Universal</DriverTargetPlatform>
+    <UMDF_VERSION_MAJOR>2</UMDF_VERSION_MAJOR>
+    <UMDF_VERSION_MINOR>25</UMDF_VERSION_MINOR>
+    <IndirectDisplayDriver>true</IndirectDisplayDriver>
+    <IDDCX_VERSION_MAJOR>1</IDDCX_VERSION_MAJOR>
+    <IDDCX_VERSION_MINOR>4</IDDCX_VERSION_MINOR>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <PropertyGroup>
+    <OutDir>$(ProjectDir)bin\$(Platform)\$(Configuration)\</OutDir>
+    <IntDir>$(ProjectDir)obj\$(Platform)\$(Configuration)\</IntDir>
+    <TargetName>WindowDisplayDriver</TargetName>
+  </PropertyGroup>
+  <PropertyGroup>
+    <WDKBinRoot Condition="'$(WDKBinRoot)' == '' or !Exists('$(WDKBinRoot)\x86\stampinf.exe')">C:\Program Files (x86)\Windows Kits\10\bin\10.0.26100.0</WDKBinRoot>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <ExceptionHandling>Sync</ExceptionHandling>
+      <LanguageStandard>stdcpp17</LanguageStandard>
+      <AdditionalIncludeDirectories>$(ProjectDir)..\..\shared;$(UMDF_INC_PATH)$(UMDF_VER_PATH);$(IDDCX_INC_PATH);$(WDK_UM_INC_PATH);$(KIT_SHARED_IncludePath);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>_DEBUG;_WIN64;_AMD64_;AMD64;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalOptions>/D_ATL_NO_WIN_SUPPORT /DUMDF_DRIVER /DIDDCX_VERSION_MAJOR=1 /DIDDCX_VERSION_MINOR=6 /DIDDCX_MINIMUM_VERSION_REQUIRED=4 %(AdditionalOptions)</AdditionalOptions>
+    </ClCompile>
+    <Link>
+      <AdditionalLibraryDirectories>$(UMDF_LIB_PATH)$(UMDF_VER_PATH);$(IDDCX_LIB_PATH);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>%(AdditionalDependencies);OneCoreUAP.lib;avrt.lib;d3d11.lib;dxgi.lib</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <ExceptionHandling>Sync</ExceptionHandling>
+      <LanguageStandard>stdcpp17</LanguageStandard>
+      <AdditionalIncludeDirectories>$(ProjectDir)..\..\shared;$(UMDF_INC_PATH)$(UMDF_VER_PATH);$(IDDCX_INC_PATH);$(WDK_UM_INC_PATH);$(KIT_SHARED_IncludePath);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>NDEBUG;_WIN64;_AMD64_;AMD64;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalOptions>/D_ATL_NO_WIN_SUPPORT /DUMDF_DRIVER /DIDDCX_VERSION_MAJOR=1 /DIDDCX_VERSION_MINOR=6 /DIDDCX_MINIMUM_VERSION_REQUIRED=4 %(AdditionalOptions)</AdditionalOptions>
+    </ClCompile>
+    <Link>
+      <AdditionalLibraryDirectories>$(UMDF_LIB_PATH)$(UMDF_VER_PATH);$(IDDCX_LIB_PATH);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>%(AdditionalDependencies);OneCoreUAP.lib;avrt.lib;d3d11.lib;dxgi.lib</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="Driver.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Driver.h" />
+    <ClInclude Include="Trace.h" />
+    <ClInclude Include="..\..\shared\WindowDisplayProtocol.h" />
+    <ClInclude Include="..\..\shared\DisplayPresets.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <!-- Keep INF out of MSBuild InfVerif/StampInf; sign script stamps/signs it. -->
+    <None Include="WindowDisplayDriver.inf" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="WindowDisplayDriver.rc" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <PropertyGroup>
+    <!-- The install script signs the complete package; never invoke WDK's per-binary signer. -->
+    <EnableTestSign>false</EnableTestSign>
+    <SignMode>Off</SignMode>
+  </PropertyGroup>
+</Project>

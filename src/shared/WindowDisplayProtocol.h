@@ -12,15 +12,19 @@ extern "C" {
 #endif
 
 // {8F3C2A91-6B4E-4D17-9C8A-1E5F0D2B7A44}
-DEFINE_GUID(GUID_DEVINTERFACE_WINDOWDISPLAY,
-    0x8f3c2a91, 0x6b4e, 0x4d17, 0x9c, 0x8a, 0x1e, 0x5f, 0x0d, 0x2b, 0x7a, 0x44);
+// Defined once in WindowDisplayGuids.cpp / driver or host translation unit.
+EXTERN_C const GUID GUID_DEVINTERFACE_WINDOWDISPLAY;
 
 #define WD_MAX_MONITORS                 8
 #define WD_MAX_NAME_CHARS               64
 #define WD_MAX_MODES                    16
 #define WD_PIPE_NAME                    L"\\\\.\\pipe\\WindowDisplay.Host"
-#define WD_SHARED_STATE_NAME            L"Local\\WindowDisplay.SharedState"
-#define WD_FRAME_EVENT_PREFIX           L"Local\\WindowDisplay.FrameReady."
+#define WD_SHARED_STATE_NAME            L"Global\\WindowDisplay.SharedState"
+#define WD_FRAME_EVENT_PREFIX           L"Global\\WindowDisplay.FrameReady."
+#define WD_PIXEL_BUFFER_PREFIX          L"Global\\WindowDisplay.Pixels."
+#define WD_MAX_PIXEL_WIDTH              2560
+#define WD_MAX_PIXEL_HEIGHT             1440
+#define WD_PIXEL_BUFFER_BYTES           (WD_MAX_PIXEL_WIDTH * WD_MAX_PIXEL_HEIGHT * 4)
 
 #define WD_IOCTL_BASE                   0x8000
 
@@ -89,6 +93,12 @@ typedef struct WdPlugOutRequest
     UINT32 ConnectorIndex;
 } WdPlugOutRequest;
 
+typedef struct WdCreateDisplayRequest
+{
+    WdMode Mode;
+    UINT32 OpenViewer;
+} WdCreateDisplayRequest;
+
 typedef struct WdUpdateModeRequest
 {
     UINT32 ConnectorIndex;
@@ -102,13 +112,25 @@ typedef struct WdMonitorRuntime
     WdDisplayState State;
     WdMode Mode;
     LUID   RenderAdapterLuid;
-    UINT64 SharedTextureHandle;     // HANDLE value for IDXGIResource1::CreateSharedHandle
+    UINT64 SharedTextureHandle;     // HANDLE value in the driver process (not directly usable cross-process)
     UINT32 TextureWidth;
     UINT32 TextureHeight;
     UINT64 FrameSerial;
     GUID   ContainerId;
     WCHAR  FriendlyName[WD_MAX_NAME_CHARS];
+    WCHAR  SharedTextureName[80];   // name for ID3D11Device1::OpenSharedResourceByName
 } WdMonitorRuntime;
+
+// Cross-session BGRA fallback. DXGI named shares cannot cross UMDF session 0 → user session.
+typedef struct WdPixelBuffer
+{
+    UINT32 Width;
+    UINT32 Height;
+    UINT32 Pitch;
+    UINT32 Sequence;                // odd while writing, even when stable
+    UINT64 FrameSerial;
+    UINT8  Pixels[WD_PIXEL_BUFFER_BYTES];
+} WdPixelBuffer;
 
 typedef struct WdAdapterStatus
 {
@@ -116,6 +138,11 @@ typedef struct WdAdapterStatus
     UINT32 MonitorCount;
     WdMonitorRuntime Monitors[WD_MAX_MONITORS];
 } WdAdapterStatus;
+
+#ifdef __cplusplus
+static_assert(sizeof(WdMonitorRuntime) == 360, "Controller ABI requires WdMonitorRuntime size 360");
+static_assert(sizeof(WdAdapterStatus) == 2888, "Controller ABI requires WdAdapterStatus size 2888");
+#endif
 
 // Named shared memory layout published by the driver for low-latency frame metadata.
 typedef struct WdSharedState
@@ -125,7 +152,7 @@ typedef struct WdSharedState
     WdMonitorRuntime Monitors[WD_MAX_MONITORS];
 } WdSharedState;
 
-// Host <-> Controller named-pipe messages (JSON also supported; this is the binary control path).
+// Host <-> Controller named-pipe binary messages.
 enum WdHostCommand : UINT32
 {
     WdCmd_Ping = 1,
@@ -141,6 +168,9 @@ enum WdHostCommand : UINT32
     WdCmd_RestoreLayout = 11,
     WdCmd_RescueOffscreen = 12,
     WdCmd_CreateDiagnostic = 13,
+    WdCmd_SetDropWindows = 14,   // UINT32 enabled — drag title-bar onto PiP to move apps
+    WdCmd_SetMirrorSource = 15,  // UINT32 connector + WCHAR[128] GDI device (empty = this display)
+    WdCmd_SetViewerInteraction = 16, // UINT32 requireDoubleClick, UINT32 hoverFade
     WdCmd_Shutdown = 100
 };
 

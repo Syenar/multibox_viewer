@@ -1,0 +1,30 @@
+<Window x:Class="WindowDisplay.Views.SettingsWindow" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="MultiBox Viewer Settings" Width="560" Height="620" WindowStartupLocation="CenterOwner">
+  <ScrollViewer><StackPanel Margin="28">
+    <TextBlock Text="Settings" FontSize="24" FontWeight="SemiBold"/>
+    <Border Style="{StaticResource Card}" Margin="0,20,0,0"><StackPanel>
+      <TextBlock Text="Display limits" FontWeight="SemiBold"/>
+      <TextBlock Text="MultiBox Viewer supports up to 8 virtual displays. For the best everyday performance, we recommend no more than 4 at 1080p." TextWrapping="Wrap" Foreground="{DynamicResource SubtleTextBrush}" Margin="0,6,0,0"/>
+    </StackPanel></Border>
+    <Expander Header="Advanced options" Margin="0,18,0,0" IsExpanded="True">
+      <StackPanel Margin="0,10,0,0">
+        <CheckBox x:Name="StartHostBox" Content="Start the host when MultiBox Viewer opens"/>
+        <CheckBox x:Name="KeepOnTopBox" Content="Keep viewers on top" Margin="0,8,0,0"/>
+        <CheckBox x:Name="DropAppsBox" Content="Drop apps onto viewer (drag a window onto the PiP)" Margin="0,8,0,0"/>
+        <TextBlock Text="With this on, drag any app by its title bar onto the picture-in-picture to move it to that virtual display. While dragging, mouse injection pauses so the cursor isn’t pulled into the virtual monitor."
+                   TextWrapping="Wrap" Foreground="{DynamicResource SubtleTextBrush}" Margin="24,6,0,0"/>
+        <CheckBox x:Name="DoubleClickBox" Content="Double-click PiP to capture mouse (don’t steal cursor on hover)" Margin="0,14,0,0"/>
+        <TextBlock Text="When enabled, hovering the preview won’t send the mouse into the virtual display. Double-click the picture to control it; press Esc (or click away) to release."
+                   TextWrapping="Wrap" Foreground="{DynamicResource SubtleTextBrush}" Margin="24,6,0,0"/>
+        <CheckBox x:Name="HoverFadeBox" Content="Fade PiP on hover (see through while pointing at it)" Margin="0,14,0,0"/>
+        <TextBlock Text="Softens the preview under the cursor so you can still see your desktop behind the PiP."
+                   TextWrapping="Wrap" Foreground="{DynamicResource SubtleTextBrush}" Margin="24,6,0,0"/>
+        <Button Content="Create diagnostic report" Click="Diagnostics_Click" Style="{StaticResource SecondaryButton}" HorizontalAlignment="Left" Margin="0,12,0,0"/>
+      </StackPanel>
+    </Expander>
+    <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,28,0,0">
+      <Button Content="Cancel" IsCancel="True" Style="{StaticResource SecondaryButton}"/>
+      <Button Content="Save" Click="Save_Click" Style="{StaticResource PrimaryButton}" Margin="8,0,0,0"/>
+    </StackPanel>
+  </StackPanel></ScrollViewer>
+</Window>
