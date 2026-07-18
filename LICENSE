@@ -1,0 +1,87 @@
+MultiBox Viewer Proprietary Software License
+Copyright (c) 2026 Syenar. All rights reserved.
+
+IMPORTANT: This is proprietary software. Viewing this repository does not grant
+you any license to use, copy, modify, or redistribute the software or its code.
+
+1. Ownership
+
+   MultiBox Viewer (also referred to in source and documentation as WindowDisplay),
+   including all source code, object code, binaries, drivers, installers, designs,
+   documentation, protocols, interfaces, trademarks, and related materials
+   (the "Software"), is and remains the exclusive property of Syenar
+   ("Licensor").
+
+2. No license granted
+
+   Except for the limited rights expressly granted in a separate written license
+   agreement signed by Licensor, no rights are granted under copyright, patent,
+   trademark, trade secret, or any other intellectual property right.
+
+   Without a separate written license from Licensor, you may NOT:
+
+   a. Copy, reproduce, or redistribute any part of the Software;
+   b. Modify, adapt, translate, or create derivative works based on the Software;
+   c. Use any part of the Software, or any derivative of it, in another product,
+      service, library, driver, app, or commercial offering;
+   d. Reverse engineer, decompile, or disassemble the Software, except to the
+      limited extent that applicable law expressly prohibits this restriction;
+   e. Remove, alter, or obscure any copyright, trademark, or proprietary notice;
+   f. Sublicense, sell, rent, lease, lend, or otherwise transfer the Software;
+   g. Publish or disclose the Software's non-public source code, protocols,
+      algorithms, or internal design for the purpose of building a competing
+      or substitute product.
+
+3. GitHub / public viewing
+
+   If this repository is publicly visible, that visibility is for Licensor's
+   convenience and does not constitute open-source licensing, dedication to the
+   public domain, or permission to reuse the Software. "Star," "fork," "clone,"
+   or download actions do not grant any license beyond what is stated here.
+
+4. Authorized use
+
+   End users may run only official builds obtained from Licensor or Licensor's
+   authorized channels, solely under the terms accompanying those builds (if any).
+   Contributors and contractors may access source only under a separate written
+   agreement with Licensor.
+
+5. Third-party components
+
+   The Software may include or adapt third-party materials under their own
+   licenses (see NOTICE). Those licenses govern only the third-party materials
+   identified there and do not change the proprietary status of Licensor's work.
+
+6. Trademarks
+
+   "MultiBox Viewer," "WindowDisplay," and related names and logos are trademarks
+   or trade dress of Licensor. No trademark license is granted by this file.
+
+7. No warranty
+
+   THE SOFTWARE IS PROVIDED "AS IS," WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+   IMPLIED, INCLUDING BUT NOT LIMITED TO WARRANTIES OF MERCHANTABILITY, FITNESS
+   FOR A PARTICULAR PURPOSE, TITLE, AND NON-INFRINGEMENT.
+
+8. Limitation of liability
+
+   TO THE MAXIMUM EXTENT PERMITTED BY LAW, LICENSOR SHALL NOT BE LIABLE FOR ANY
+   INDIRECT, INCIDENTAL, SPECIAL, CONSEQUENTIAL, OR PUNITIVE DAMAGES, OR ANY
+   LOSS OF PROFITS, DATA, OR BUSINESS, ARISING FROM THE SOFTWARE OR THIS LICENSE,
+   EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGES.
+
+9. Enforcement
+
+   Unauthorized use may violate copyright and other laws and may result in civil
+   and/or criminal liability. Licensor reserves all rights and remedies.
+
+10. Contact
+
+    For licensing, commercial use, or permission requests, contact the repository
+    owner (@Syenar on GitHub) or the contact method published with official releases.
+
+11. Governing law
+
+    This license is governed by the laws of the United States and the State of
+    Delaware, excluding conflict-of-law rules, unless a different jurisdiction is
+    required by mandatory local law where you reside.
