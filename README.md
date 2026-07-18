@@ -1,15 +1,15 @@
 # MultiBox Viewer
 
-MultiBox Viewer is a Windows 11 application for creating real virtual displays and opening each display inside its own movable, resizable viewer window.
+MultiBox Viewer turns extra monitors into picture-in-picture windows on Windows 11.
 
-The app allows users to create additional monitors recognized by Windows, move applications onto them, interact with those applications through local viewer windows, and save complete multi-display layouts for later use.
+It creates real virtual displays that Windows treats like normal monitors, then shows each one inside its own floating, movable, resizable viewer — like picture-in-picture for your whole desktop. Move apps onto those displays, work in them through the viewer windows, and save the full layout for later.
 
-MultiBox Viewer is designed around simplicity. Creating a new display, moving an app, restoring a workspace, or removing a display should take no more than three to five steps.
+Creating a new display, moving an app, restoring a workspace, or removing a display should take no more than three to five steps.
 
 ## Planned features
 
 - Create real virtual monitors recognized by Windows
-- Open each virtual display in a movable and resizable window
+- View each display in a picture-in-picture style floating window
 - Create multiple independent virtual displays
 - Move running applications to a selected display
 - Mouse, keyboard, and scroll input through each viewer
